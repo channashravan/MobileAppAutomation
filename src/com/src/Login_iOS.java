@@ -34,14 +34,16 @@ public class Login_iOS {
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("platformName", "iOS");
-        caps.setCapability("platformVersion", "11.4");
+        caps.setCapability("platformVersion", "12.0");
         // caps.setCapability("appPackage","android");
-        caps.setCapability("deviceName", "iPhone 8 Plus");
+        caps.setCapability("deviceName", "iPhone XR");
         //caps.setCapability("appActivity","android");
         //caps.setCapability("app", "/Users/schanna/Library/Developer/Xcode/DerivedData/CaringBridge-gjkqfuglpuaykbfbmeiwsubcineh/Build/Products/Debug-iphonesimulator/CaringBridge.app");
         //caps.setCapability("app", "/Users/schanna/Library/Developer/Xcode/DerivedData/CaringBridge-bkhmdprgljutkxfmtnhbnneixepm/Build/Products/Debug-iphonesimulator/CaringBridge.app");
        //caps.setCapability("app", "/Users/schanna/Library/Developer/Xcode/DerivedData/CaringBridge-btgefoixnjvdoedszrsqerncrqij/Build/Products/Debug-iphonesimulator/CaringBridge.app");
        caps.setCapability("app", "/Users/schanna/Library/Developer/Xcode/DerivedData/CaringBridge-ectrvqzooqwfkggwncouhcckrqph/Build/Products/Debug-iphonesimulator/CaringBridge.app"); 
+       caps.setCapability("app", "/Users/schanna/Library/Developer/Xcode/DerivedData/CaringBridge-ectrvqzooqwfkggwncouhcckrqph/Build/Products/Debug-iphonesimulator/CaringBridge.app");
+       
        driver = new AppiumDriver(new URL("http://0.0.0.0:4723/wd/hub"), caps);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         System.out.println("App launched..");
@@ -309,6 +311,7 @@ public class Login_iOS {
 
     	Thread.sleep(10000);
  }
+    //MOBILE-486
  @Ignore
  @Test
  public void tributes_screen() throws Exception {
@@ -321,6 +324,8 @@ public class Login_iOS {
 	 driver.findElement(By.xpath("//XCUIElementTypeStaticText[@label='Tributes']")).click();
 	 Assert.assertTrue(driver.findElement(By.xpath("(//XCUIElementTypeCell/XCUIElementTypeStaticText)[1]")).isDisplayed());
  }
+ //MOBILE-465
+ @Ignore
  @Test
  public void quick_entry_widget_without_keyboard() throws Exception {
 		WebDriverWait wait = new WebDriverWait(driver,60);
@@ -343,16 +348,50 @@ public class Login_iOS {
     	}
     	//Thread.sleep(10000);
  }
+ @Ignore
+ //Mobile-429
+ @Test
+ public void gallery_author_empty_screen() throws Exception {
+	 
+	 profile_authoring();
+	 driver.findElement(By.xpath("//XCUIElementTypeStaticText[@label='Gallery']")).click();
+	 Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeButton[@label='Add Photos']")).isDisplayed());
+	 Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeButton[@label='authorSiteSettings']")).isDisplayed());
+	 //Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeButton[@label='authorSiteSettings']")).isDisplayed());
+	 Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeButton[@label='My Sites']")).isDisplayed());
+	 driver.findElement(By.xpath("//XCUIElementTypeButton[@label='Add Photos']")).click();
+	 driver.findElement(By.xpath("//*[@label='OK']")).click();
+	 driver.findElement(By.xpath("//*[@label='Done']")).isDisplayed();
+	
+ }
+ @Ignore
+ //Mobile-299
+ @Test
+ public void Journal_Comment_on_Comment() throws Exception {
+	 profile_authoring();
+	 driver.findElement(By.xpath("//XCUIElementTypeStaticText[@label='Journal']")).click();
+	 driver.findElement(By.xpath("(//XCUIElementTypeStaticText[@label='0 Comments'])[1]")).click();
+	 Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeTextView/XCUIElementTypeStaticText")).isDisplayed());
+	// Assert.assertFalse(driver.findElement(By.xpath("*[@label='Post']")).isDisplayed());
+	 driver.findElement(By.xpath("//XCUIElementTypeTextView/XCUIElementTypeStaticText")).sendKeys("new comment on comment");
+	Thread.sleep(5000);
+	 Assert.assertTrue(driver.findElement(By.xpath("//XCUIElementTypeButton[@label='Post']")).isDisplayed());
+	 driver.findElement(By.xpath("//XCUIElementTypeButton[@label='Post']")).click();
+	// Assert.assertTrue(driver.findElement(By.xpath("XCUIElementTypeStaticText[@label='new comment on comment']")).iDisplayed());
+	driver.findElement(By.xpath("(//XCUIElementTypeButton[@label='SiteEllipses'])[2]")).click();
+	driver.findElement(By.xpath("//*[@label='Delete Comment']")).click();
+	
+ }
  
-    
+
+ 
+ 
+ 
     @After
     public void tearDown() {    	
     	driver.quit();
     	System.out.println("App closed");
-    	
-    	
-    	
-    	
+     	
     	
     }
 

@@ -12,6 +12,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.util.List;
@@ -28,7 +30,7 @@ public class Login_Android {
     public void Launch() throws Exception {
     	/*---------------- Browserstack---------------------*/
     	
-    	DesiredCapabilities caps = new DesiredCapabilities();
+    	/*DesiredCapabilities caps = new DesiredCapabilities();
 		caps.setCapability("platformName", "android");
 		caps.setCapability("os_version", "7.1");
 		caps.setCapability("deviceName", "Google Pixel");
@@ -38,16 +40,16 @@ public class Login_Android {
 		 caps.setCapability("name", "Login Test"); 
 		caps.setCapability("browserstack.local", "false");
 		caps.setCapability("app", "bs://d56990707bfdc22fd8bf6b95bedaad2ce5817b53");
-		//caps.setCapability("app", "bs://e4aeae506e57c803023e93f55fabe2ba978b0b09"); 
- 	driver = new AndroidDriver(new URL(URL),caps);
+		
+ 	driver = new AndroidDriver(new URL(URL),caps); */
     	/*----------------- physical device/simulator ------------*/
     	
-      /* DesiredCapabilities caps = new DesiredCapabilities();
+       DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("platformName", "android");
         caps.setCapability("platformVersion", "5.1.1");
-         caps.setCapability("deviceName", "emulator");
-         caps.setCapability("app","/Users/schanna/Downloads/cb_version_1.6.apk");
-        driver = new AndroidDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), caps);*/
+        caps.setCapability("deviceName", "emulator");
+        caps.setCapability("app","/Users/schanna/Downloads/com.caringbridge.caringbridge-v1.9.1-SNAPSHOT.apk");
+        driver = new AndroidDriver<WebElement>(new URL("http://0.0.0.0:4723/wd/hub"), caps);
 
         /*--------------------------------------------------------*/
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
@@ -113,7 +115,7 @@ public class Login_Android {
     	Assert.assertTrue("Add Photos", driver.findElement(By.xpath("//android.widget.TextView[@text='Add Photos']")).isDisplayed());
     	driver.hideKeyboard();
     }
-    
+    @Ignore
    //MOBILE-271
    @Test
    public void journal_screen_validation() throws Exception {
@@ -190,7 +192,19 @@ public class Login_Android {
     	
     	
     }
-    
+   @Ignore
+   //Mobile-429
+   @Test
+   public void journal_Social_Share_ActionBar() throws Exception {
+  	
+  		Login();
+       	driver.findElement(By.xpath("//android.widget.TextView[@text='Following']")).click();
+       	driver.findElementByXPath("//android.widget.TextView[@text='Journal']").click();
+       	driver.findElementById("com.caringbridge.caringbridge:id/journal_card_constraintlayout").click();
+      	driver.findElementById("com.caringbridge.caringbridge:id/journal_action_bar_share_img").click();
+      	
+   
+   }
     
 
    /* @Test
@@ -198,8 +212,34 @@ public class Login_Android {
         //com.caringbridge.caringbridge:id/facebook_login
         //driver.findElement(By.id("com.caringbridge.caringbridge:id/facebook_login")).click();
     } */
-   
-   
+   @Ignore
+   @Test
+   public void journalEntryScreen_displayCommentsList_Author() throws Exception {
+	   Login();
+	   driver.findElement(By.xpath("//android.widget.TextView[@text='Authoring']")).click();
+   	driver.findElementByXPath("//android.widget.TextView[@text='Journal']").click();
+   	driver.findElementById("com.caringbridge.caringbridge:id/share_journal_list_journal_item").click();
+   	//driver.findElementById("com.caringbridge.caringbridge:id/journal_action_bar_comment_img").click();
+   	driver.findElementById("com.caringbridge.caringbridge:id/comment_ellipses").click();
+   	Assert.assertTrue(driver.findElementById("com.caringbridge.caringbridge:id/delete_comment_dialog").isDisplayed());
+   	Assert.assertTrue(driver.findElementById("com.caringbridge.caringbridge:id/edit_comment_dialog").isDisplayed());
+  	
+   	
+   }
+   @Test
+   public void journalEntryScreen_displayCommentsList_Visitor() throws Exception {
+	   Login();
+	   driver.findElement(By.xpath("//android.widget.TextView[@text='Following']")).click();
+      	driver.findElementByXPath("//android.widget.TextView[@text='Journal']").click();
+   	driver.findElementById("com.caringbridge.caringbridge:id/journal_card_constraintlayout").click();
+   	//driver.findElementById("com.caringbridge.caringbridge:id/journal_action_bar_comment_img").click();
+   	driver.findElementById("com.caringbridge.caringbridge:id/comment_ellipses").click();
+   	Assert.assertTrue(driver.findElementById("com.caringbridge.caringbridge:id/delete_comment_dialog").isDisplayed());
+   	Assert.assertTrue(driver.findElementById("com.caringbridge.caringbridge:id/edit_comment_dialog").isDisplayed());
+   	
+   	
+   	
+   }
 
     @After
     public void teardown() {
